@@ -9,6 +9,10 @@ export default async function HomePage() {
     include: {
       tasks: {
         orderBy: { createdAt: "desc" }
+      },
+      members: {
+        include: { user: true },
+        orderBy: { createdAt: "asc" }
       }
     }
   });
@@ -36,5 +40,11 @@ export default async function HomePage() {
     createdAt: task.createdAt.toISOString()
   }));
 
-  return <TaskBoard project={{ id: project.id, name: project.name, description: project.description }} initialTasks={tasks} />;
+  const members = project.members.map((membership) => ({
+    id: membership.user.id,
+    name: membership.user.name,
+    role: membership.role
+  }));
+
+  return <TaskBoard project={{ id: project.id, name: project.name, description: project.description }} initialTasks={tasks} members={members} />;
 }

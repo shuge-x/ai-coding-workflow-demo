@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizeTaskTitle } from "@/lib/task-title";
+import { normalizeTaskTitle } from "../lib/task-title";
 
 describe("normalizeTaskTitle", () => {
   it("trims leading and trailing whitespace", () => {

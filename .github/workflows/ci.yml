@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      - run: npm install
       - run: cp .env.example .env
       - run: npm run db:push
       - run: npm run db:seed

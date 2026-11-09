@@ -31,3 +31,7 @@ jobs:
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+      - name: Verify task assignment behavior on the Story 06 baseline
+        run: |
+          PRACTICE_BASELINE=06 npm run db:reset
+          PRACTICE_ASSIGNMENT_TEST=1 npx playwright test e2e/assignment.spec.ts

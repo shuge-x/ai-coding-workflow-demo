@@ -7,6 +7,7 @@ export default async function HomePage() {
   const project = await prisma.project.findFirst({
     orderBy: { createdAt: "asc" },
     include: {
+      team: true,
       tasks: {
         orderBy: { createdAt: "desc" }
       },
@@ -46,5 +47,5 @@ export default async function HomePage() {
     role: membership.role
   }));
 
-  return <TaskBoard project={{ id: project.id, name: project.name, description: project.description }} initialTasks={tasks} members={members} />;
+  return <TaskBoard project={{ id: project.id, name: project.name, description: project.description, teamName: project.team.name }} initialTasks={tasks} members={members} />;
 }

@@ -49,7 +49,7 @@ Each tag is an independent starting point. Start each exercise in a fresh clone 
 | `story-05-start` | Complex bug diagnosis | Dragging a task updates the UI but does not persist the status |
 | `story-06-start` | Safe refactoring | TaskService owns several responsibilities and has behavior tests |
 
-The tags will be published only after the corresponding baseline has been verified. Story 02 and later use a matching seed profile, e.g. `PRACTICE_BASELINE=02 npm run db:seed`. See `docs/practice-baselines.md` for exact checkout instructions and expected state.
+All six annotated tags are published and point to the immutable commits listed in `docs/practice-baselines.md`. Story 02 and later use a matching seed profile, e.g. `PRACTICE_BASELINE=02 npm run db:seed`. The published baseline matrix verifies setup, tests, browser smoke checks, the Story 05 expected-red reproduction, and Story 06 behavior protection.
 
 ## Tech stack
 

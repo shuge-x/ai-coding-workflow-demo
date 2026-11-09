@@ -23,6 +23,7 @@ import type { BoardTask, TaskStatus } from "@/lib/task-types";
 type Props = {
   project: { id: string; name: string; description: string };
   initialTasks: BoardTask[];
+  members: { id: string; name: string; role: string }[];
 };
 
 const columns: { id: TaskStatus; title: string; tone: string }[] = [
@@ -31,7 +32,7 @@ const columns: { id: TaskStatus; title: string; tone: string }[] = [
   { id: "DONE", title: "已完成", tone: "green" }
 ];
 
-export function TaskBoard({ project, initialTasks }: Props) {
+export function TaskBoard({ project, initialTasks, members }: Props) {
   const [tasks, setTasks] = useState(initialTasks);
   const [showCreate, setShowCreate] = useState(false);
   const [title, setTitle] = useState("");
@@ -135,6 +136,7 @@ export function TaskBoard({ project, initialTasks }: Props) {
               <p>{project.description || "整理目标，明确下一步，让每一项工作都有进展。"}</p>
             </div>
             <div className="heading-actions">
+              <div className="member-stack" aria-label="项目成员">{members.map((member, index) => <span key={member.id} className={"member-avatar member-" + (index % 4)} title={member.name}>{member.name.slice(0,1)}</span>)}<span className="member-count">{members.length} 位成员</span></div>
               <button className="secondary-button"><Filter size={15} />筛选<span className="button-caret">⌄</span></button>
               <button className="secondary-button"><Command size={15} />视图<span className="button-caret">⌄</span></button>
               <button className="primary-button" onClick={openCreate}><Plus size={17} />新建任务</button>

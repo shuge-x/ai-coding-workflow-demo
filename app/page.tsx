@@ -9,7 +9,8 @@ export default async function HomePage() {
     include: {
       team: true,
       tasks: {
-        orderBy: { createdAt: "desc" }
+        orderBy: { createdAt: "desc" },
+        include: { assignee: true }
       },
       members: {
         include: { user: true },
@@ -38,6 +39,8 @@ export default async function HomePage() {
     status: task.status as "TODO" | "IN_PROGRESS" | "DONE",
     priority: task.priority as "LOW" | "MEDIUM" | "HIGH",
     dueDate: task.dueDate?.toISOString() ?? null,
+    assigneeId: task.assigneeId,
+    assigneeName: task.assignee?.name ?? null,
     createdAt: task.createdAt.toISOString()
   }));
 

@@ -1,28 +1,27 @@
 # Practice baseline status
 
-This file records the verified start points for the six learning routes.
+Each practice route starts from an immutable Git tag. Use a fresh clone or worktree for each story so one exercise cannot contaminate another.
 
-A start tag is not published merely because the application builds. It must have:
-1. A clean clone / checkout path.
-2. A deterministic database seed.
-3. The intended scenario state.
-4. A successful local setup and CI run.
-5. A short verification checklist.
+## Published start points
 
-| Tag | Route | Required baseline | Status |
+| Tag | Route | Starting state | Commit |
 |---|---|---|---|
-| `story-01-start` | Quick change | Empty task board; intentionally basic empty state | In preparation |
-| `story-02-start` | Requirements discovery | Existing due-date field and tasks; reminder rules deliberately undefined | Planned |
-| `story-03-start` | Feature development | Projects and memberships exist; assignment workflow is absent | In preparation |
-| `story-04-start` | Large architecture | Single-team / single-project assumptions documented | Planned |
-| `story-05-start` | Complex bug diagnosis | Drag-and-drop UI changes optimistically; persisted status remains unchanged | Planned |
-| `story-06-start` | Safe refactoring | TaskService contains multiple responsibilities; behavior tests pass | Planned |
+| `story-01-start` | Quick change | Empty task board with a deliberately basic empty state | `b05ed957` |
+| `story-02-start` | Requirements discovery | Tasks have due dates; no reminder rules or reminder behavior exist | `0e74e909` |
+| `story-03-start` | Feature development | Project members and roles exist; task assignment is not implemented | `234d9b57` |
+| `story-04-start` | Large architecture | One Team / one Project; no tenant-aware request or data isolation | `ea966dcf` |
+| `story-05-start` | Complex bug diagnosis | Drag-and-drop looks successful, but the status is not persisted | `25e30219` |
+| `story-06-start` | Safe refactoring | TaskService handles task lifecycle, assignment, permissions and comments | `3f62257b` |
+
+The tags are annotated and point to exact starting commits. When the tags are published, the `story-06-start` tag triggers a matrix verification workflow for all six baselines. Story 05 additionally proves that its reproduction test fails for the expected persistence symptom; Story 06 proves that existing assignment behavior is protected.
 
 ## Fresh start
 
-Once the tags are published, use a fresh clone or a separate worktree for each route:
+Use a fresh clone or a separate worktree for each route:
 
 ```bash
+git clone https://github.com/shuge-x/ai-coding-workflow-demo.git
+cd ai-coding-workflow-demo
 git fetch --tags
 git checkout story-01-start
 npm install
@@ -32,4 +31,28 @@ PRACTICE_BASELINE=01 npm run db:seed
 npm run dev
 ```
 
-Do not use one modified working directory for multiple stories. The browser database is local to the checked-out version. For Story 02 and later, the seed script accepts the matching baseline number, for example `PRACTICE_BASELINE=02 npm run db:seed`; the CI default remains baseline 01. Story 05 exposes the known persistence defect with `npm run test:bug-repro`; the test is skipped in normal CI unless explicitly requested. Story 06 uses `PRACTICE_BASELINE=06 npm run db:reset` and `npm run test:assignment` to verify the existing task assignment behavior before refactoring.
+For another story, change both the tag and seed profile. For example, Story 05:
+
+```bash
+git checkout story-05-start
+PRACTICE_BASELINE=05 npm run db:reset
+npm run dev
+```
+
+In a second terminal, run the deliberately failing reproduction test:
+
+```bash
+npm run test:bug-repro
+```
+
+Story 06 uses:
+
+```bash
+git checkout story-06-start
+PRACTICE_BASELINE=06 npm run db:reset
+npm run dev
+```
+
+Then run `npm run test:assignment` to confirm the existing behavior before attempting the refactor.
+
+Do not use one modified working directory for multiple stories. The SQLite database is local to the checked-out version.

@@ -32,6 +32,7 @@ export default async function HomePage() {
     description: task.description,
     status: task.status as "TODO" | "IN_PROGRESS" | "DONE",
     priority: task.priority as "LOW" | "MEDIUM" | "HIGH",
+    dueDate: task.dueDate?.toISOString() ?? null,
     createdAt: task.createdAt.toISOString()
   }));
 

@@ -42,14 +42,14 @@ Each tag is an independent starting point. Start each exercise in a fresh clone 
 
 | Tag | Practice route | Starting state |
 |---|---|---|
-| `story-01-start` | Quick change | Empty board with an intentionally weak empty state |
-| `story-02-start` | Requirements discovery | Tasks have due dates; reminder behavior is not specified |
-| `story-03-start` | Feature development | Projects and members exist; task assignment is not implemented |
-| `story-04-start` | Large architecture | Single-team assumptions are explicit; multi-team SaaS is not implemented |
-| `story-05-start` | Complex bug diagnosis | Dragging a task updates the UI but does not persist the status |
-| `story-06-start` | Safe refactoring | TaskService owns several responsibilities and has behavior tests |
+| `story-01-start-r1` | Quick change | Empty board with an intentionally weak empty state |
+| `story-02-start-r1` | Requirements discovery | Tasks have due dates; reminder behavior is not specified |
+| `story-03-start-r1` | Feature development | Projects and members exist; task assignment is not implemented |
+| `story-04-start-r1` | Large architecture | Single-team assumptions are explicit; multi-team SaaS is not implemented |
+| `story-05-start-r1` | Complex bug diagnosis | Dragging a task updates the UI but does not persist the status |
+| `story-06-start-r1` | Safe refactoring | TaskService owns several responsibilities and has behavior tests |
 
-All six annotated tags are published and point to the immutable commits listed in `docs/practice-baselines.md`. Story 02 and later use a matching seed profile, e.g. `PRACTICE_BASELINE=02 npm run db:seed`. The published baseline matrix verifies setup, tests, browser smoke checks, the Story 05 expected-red reproduction, and Story 06 behavior protection.
+The `-r1` tags are the recommended learner starting points and contain runnable baseline browser checks. The original tags remain published as historical baselines. All annotated tags point to immutable commits listed in `docs/practice-baselines.md`. Story 02 and later use a matching seed profile, e.g. `PRACTICE_BASELINE=02 npm run db:seed`. The published baseline matrix verifies setup, tests, browser smoke checks, the Story 05 expected-red reproduction, and Story 06 behavior protection.
 
 ## Tech stack
 

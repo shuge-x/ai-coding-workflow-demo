@@ -28,8 +28,8 @@ git checkout story-01-start
 npm install
 cp .env.example .env
 npm run db:push
-npm run db:seed
+PRACTICE_BASELINE=01 npm run db:seed
 npm run dev
 ```
 
-Do not use one modified working directory for multiple stories. The browser database is local to the checked-out version.
+Do not use one modified working directory for multiple stories. The browser database is local to the checked-out version. For Story 02 and later, the seed script accepts the matching baseline number, for example `PRACTICE_BASELINE=02 npm run db:seed`; the CI default remains baseline 01.

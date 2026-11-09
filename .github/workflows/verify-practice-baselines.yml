@@ -1,0 +1,57 @@
+name: Verify practice story baselines
+
+on:
+  push:
+    tags:
+      - story-06-start
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Story ${{ matrix.story }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        story: ["01", "02", "03", "04", "05", "06"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: story-${{ matrix.story }}-start
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: cp .env.example .env
+      - run: npm run db:push
+      - run: PRACTICE_BASELINE=${{ matrix.story }} npm run db:seed
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Run baseline browser checks
+        if: matrix.story == '01'
+        run: PRACTICE_BASELINE=01 npm run test:e2e
+      - name: Run browser checks excluding the empty-board-only scenario
+        if: matrix.story != '01'
+        run: PRACTICE_BASELINE=${{ matrix.story }} npx playwright test --grep-invert "learner can create the first task"
+      - name: Confirm the Story 05 bug is reproducible (expected red)
+        if: matrix.story == '05'
+        run: |
+          set +e
+          npm run test:bug-repro > /tmp/story-05-red.log 2>&1
+          status=$?
+          set -e
+          cat /tmp/story-05-red.log
+          if [ "$status" -eq 0 ]; then
+            echo "The seeded Story 05 defect was not reproduced."
+            exit 1
+          fi
+          grep -q "Expected: visible" /tmp/story-05-red.log
+          echo "Expected red signal observed for Story 05."
+      - name: Verify assignment behavior on Story 06
+        if: matrix.story == '06'
+        run: npm run test:assignment

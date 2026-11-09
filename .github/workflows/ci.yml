@@ -1,0 +1,37 @@
+name: Team Task Board CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: team-task-board-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: cp .env.example .env
+      - run: npm run db:push
+      - run: npm run db:seed
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Verify task assignment behavior on the Story 06 baseline
+        run: |
+          PRACTICE_BASELINE=06 npm run db:reset
+          PRACTICE_ASSIGNMENT_TEST=1 npx playwright test e2e/assignment.spec.ts

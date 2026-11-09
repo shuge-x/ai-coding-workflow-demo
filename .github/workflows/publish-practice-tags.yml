@@ -1,0 +1,42 @@
+name: Publish practice story start tags
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - story-tags.json
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch the practice development history
+        run: git fetch origin feature/team-task-board-foundation:refs/remotes/origin/feature/team-task-board-foundation
+      - name: Create annotated story tags
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          node <<'NODE'
+          const { execFileSync, spawnSync } = require("node:child_process");
+          const tags = require("./story-tags.json");
+          for (const [tag, entry] of Object.entries(tags)) {
+            const existing = spawnSync("git", ["show-ref", "--verify", "--quiet", `refs/tags/${tag}`]);
+            if (existing.status === 0) {
+              console.log(`Skip existing tag ${tag}`);
+              continue;
+            }
+            const reachable = spawnSync("git", ["merge-base", "--is-ancestor", entry.sha, "origin/feature/team-task-board-foundation"]);
+            if (reachable.status !== 0) {
+              throw new Error(`Target commit for ${tag} is not reachable from the practice branch: ${entry.sha}`);
+            }
+            execFileSync("git", ["tag", "-a", tag, entry.sha, "-m", entry.message], { stdio: "inherit" });
+            execFileSync("git", ["push", "origin", `refs/tags/${tag}`], { stdio: "inherit" });
+            console.log(`Published ${tag} -> ${entry.sha}`);
+          }
+          NODE

@@ -30,7 +30,26 @@ async function main() {
     await prisma.task.createMany({ data: tasks.map((task) => ({ ...task, projectId: project.id })) });
   }
 
-  console.log("Seeded project:", project.name, "baseline:", baseline);
+  const demoUsers = [
+    { id: "user-lin", name: "林晓", email: "lin@example.test", role: "OWNER" },
+    { id: "user-chen", name: "陈默", email: "chen@example.test", role: "MANAGER" },
+    { id: "user-zhou", name: "周宁", email: "zhou@example.test", role: "MEMBER" }
+  ];
+
+  for (const user of demoUsers) {
+    const saved = await prisma.user.upsert({
+      where: { email: user.email },
+      update: { name: user.name },
+      create: { id: user.id, name: user.name, email: user.email }
+    });
+    await prisma.membership.upsert({
+      where: { projectId_userId: { projectId: project.id, userId: saved.id } },
+      update: { role: user.role },
+      create: { projectId: project.id, userId: saved.id, role: user.role }
+    });
+  }
+
+  console.log("Seeded project:", project.name, "baseline:", baseline, "members:", demoUsers.length);
 }
 
 main()

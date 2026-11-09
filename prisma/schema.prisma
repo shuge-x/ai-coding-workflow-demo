@@ -11,6 +11,8 @@ model Project {
   id          String   @id @default(cuid())
   name        String
   description String   @default("")
+  teamId      String
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Restrict)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   tasks       Task[]
@@ -51,4 +53,13 @@ model Membership {
 
   @@unique([projectId, userId])
   @@index([projectId, role])
+}
+
+model Team {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  projects  Project[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

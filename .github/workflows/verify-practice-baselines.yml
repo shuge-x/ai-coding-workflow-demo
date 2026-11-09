@@ -1,7 +1,7 @@
 name: Verify practice story baselines
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   push:
     tags:
       - story-06-start

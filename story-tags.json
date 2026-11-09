@@ -1,0 +1,26 @@
+{
+  "story-01-start": {
+    "sha": "b05ed9579f45b12a8caf35a3d5a884c804263c57",
+    "message": "Story 01: simple empty task board for a quick-change exercise"
+  },
+  "story-02-start": {
+    "sha": "0e74e909052f9a76b0797ed1c115eee608601aeb",
+    "message": "Story 02: due dates exist, reminder behavior is undefined"
+  },
+  "story-03-start": {
+    "sha": "234d9b57e7bafcfc50bf7b7d974ed1f735a8e1c0",
+    "message": "Story 03: project members exist, task assignment is not implemented"
+  },
+  "story-04-start": {
+    "sha": "ea966dcfc52c57cd77a81f86bf9cdd5fe105bd85",
+    "message": "Story 04: single-team boundary before multi-team architecture work"
+  },
+  "story-05-start": {
+    "sha": "25e302192d94ee35220810f37a4fc257164f5cbe",
+    "message": "Story 05: reproducible drag-and-drop persistence defect"
+  },
+  "story-06-start": {
+    "sha": "3f62257b0c291207e90f0cd81ad48d64077db50c",
+    "message": "Story 06: behavior-tested TaskService with multiple responsibilities"
+  }
+}

@@ -2,9 +2,16 @@ name: Team Task Board CI
 
 on:
   push:
-    branches: [main, feature/**]
+    branches: [main]
   pull_request:
     branches: [main]
+
+concurrency:
+  group: team-task-board-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   verify:

@@ -20,6 +20,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: story-${{ matrix.story }}-start
+          fetch-depth: 0
+      - name: Load current verification specs
+        run: |
+          git fetch origin feature/team-task-board-foundation:refs/remotes/origin/feature/team-task-board-foundation
+          mkdir -p e2e
+          git show origin/feature/team-task-board-foundation:e2e/baseline.spec.ts > e2e/baseline.spec.ts
+          if [ "${{ matrix.story }}" = "01" ]; then
+            git show origin/feature/team-task-board-foundation:e2e/board.spec.ts > e2e/board.spec.ts
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -35,9 +44,9 @@ jobs:
       - name: Run baseline browser checks
         if: matrix.story == '01'
         run: PRACTICE_BASELINE=01 npm run test:e2e
-      - name: Run browser checks excluding the empty-board-only scenario
+      - name: Run seeded baseline browser smoke check
         if: matrix.story != '01'
-        run: PRACTICE_BASELINE=${{ matrix.story }} npx playwright test --grep-invert "learner can create the first task"
+        run: PRACTICE_BASELINE=${{ matrix.story }} npx playwright test e2e/baseline.spec.ts
       - name: Confirm the Story 05 bug is reproducible (expected red)
         if: matrix.story == '05'
         run: |

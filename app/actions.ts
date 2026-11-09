@@ -8,7 +8,7 @@ const createTaskSchema = z.object({
   projectId: z.string().min(1),
   title: z.string().trim().min(2, "任务名称至少需要 2 个字符").max(80, "任务名称不能超过 80 个字符"),
   description: z.string().trim().max(500, "描述不能超过 500 个字符").optional(),
-  dueDate: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/).optional()
+  dueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
 });
 
 export async function createTaskAction(input: {

@@ -18,7 +18,8 @@
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:reset": "prisma db push --force-reset && npm run db:seed",
-    "test:bug-repro": "PRACTICE_BUG_REPRO=1 playwright test e2e/bug-repro.spec.ts"
+    "test:bug-repro": "PRACTICE_BUG_REPRO=1 playwright test e2e/bug-repro.spec.ts",
+    "test:assignment": "PRACTICE_BASELINE=06 npm run db:reset && PRACTICE_ASSIGNMENT_TEST=1 playwright test e2e/assignment.spec.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { createTask, updateTaskStatus } from "@/lib/task-service";
+import { assignTask, createTask, updateTaskStatus } from "@/lib/task-service";
 
 const createTaskSchema = z.object({
   projectId: z.string().min(1),
@@ -56,4 +56,29 @@ export async function updateTaskStatusAction(input: { taskId: string; status: "T
   await updateTaskStatus(parsed.data.taskId, parsed.data.status);
   revalidatePath("/");
   return { ok: true as const };
+}
+
+const assignTaskSchema = z.object({
+  taskId: z.string().min(1),
+  assigneeId: z.string().nullable()
+});
+
+export async function assignTaskAction(input: { taskId: string; assigneeId: string | null }) {
+  const parsed = assignTaskSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false as const, error: "无效的指派请求" };
+  }
+
+  try {
+    // Demo identity: the seeded project owner. A real application must use its authenticated session.
+    const task = await assignTask(parsed.data.taskId, "user-lin", parsed.data.assigneeId);
+    revalidatePath("/");
+    return {
+      ok: true as const,
+      assigneeId: task.assigneeId,
+      assigneeName: task.assignee?.name ?? null
+    };
+  } catch (error) {
+    return { ok: false as const, error: error instanceof Error ? error.message : "指派失败" };
+  }
 }

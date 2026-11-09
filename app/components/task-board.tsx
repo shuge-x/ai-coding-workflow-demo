@@ -36,6 +36,7 @@ export function TaskBoard({ project, initialTasks }: Props) {
   const [showCreate, setShowCreate] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState("");
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -58,6 +59,7 @@ export function TaskBoard({ project, initialTasks }: Props) {
     setShowCreate(false);
     setTitle("");
     setDescription("");
+    setDueDate("");
     setError("");
   };
 
@@ -65,7 +67,7 @@ export function TaskBoard({ project, initialTasks }: Props) {
     event.preventDefault();
     setError("");
     startTransition(async () => {
-      const result = await createTaskAction({ projectId: project.id, title, description });
+      const result = await createTaskAction({ projectId: project.id, title, description, dueDate: dueDate || undefined });
       if (!result.ok) {
         setError(result.error);
         return;
@@ -74,6 +76,7 @@ export function TaskBoard({ project, initialTasks }: Props) {
       setShowCreate(false);
       setTitle("");
       setDescription("");
+      setDueDate("");
     });
   };
 
@@ -162,7 +165,7 @@ export function TaskBoard({ project, initialTasks }: Props) {
                           <div className="task-card-top"><span className={"priority-tag " + task.priority.toLowerCase()}>{task.priority === "HIGH" ? "高优先级" : task.priority === "LOW" ? "低优先级" : "普通"}</span><button className="task-menu" aria-label={task.title + "更多操作"}>···</button></div>
                           <h3>{task.title}</h3>
                           {task.description && <p>{task.description}</p>}
-                          <div className="task-card-footer"><span className="task-id">TASK-{task.id.slice(-4).toUpperCase()}</span><span className="task-avatar">林</span></div>
+                          <div className="task-card-footer"><span className="task-id">TASK-{task.id.slice(-4).toUpperCase()}</span>{task.dueDate && <span className="task-due-date"><CalendarDays size={12} />{new Date(task.dueDate).toLocaleDateString("zh-CN", { month: "short", day: "numeric" })}</span>}<span className="task-avatar">林</span></div>
                         </article>
                       ))}
                       <button className="add-task-inline" onClick={openCreate}><Plus size={15} />添加任务</button>
@@ -181,6 +184,8 @@ export function TaskBoard({ project, initialTasks }: Props) {
               <form onSubmit={submitTask}>
                 <label htmlFor="task-title">任务名称</label>
                 <input id="task-title" autoFocus maxLength={80} placeholder="例如：整理本周产品需求" value={title} onChange={(event) => setTitle(event.target.value)} />
+                <label htmlFor="task-due-date">截止日期 <span>选填</span></label>
+                <input id="task-due-date" type="date" value={dueDate} onChange={(event) => setDueDate(event.target.value)} />
                 <label htmlFor="task-description">补充说明 <span>选填</span></label>
                 <textarea id="task-description" rows={3} maxLength={500} placeholder="描述任务背景或预期结果..." value={description} onChange={(event) => setDescription(event.target.value)} />
                 {error && <p className="form-error" role="alert">{error}</p>}

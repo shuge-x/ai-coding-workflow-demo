@@ -15,7 +15,7 @@ The purpose of this repository is educational: each practice route starts from a
 npm install
 cp .env.example .env
 npm run db:push
-npm run db:seed
+PRACTICE_BASELINE=01 npm run db:seed
 npm run dev
 ```
 
@@ -47,7 +47,7 @@ Each tag is an independent starting point. Start each exercise in a fresh clone 
 | `story-05-start` | Complex bug diagnosis | Dragging a task updates the UI but does not persist the status |
 | `story-06-start` | Safe refactoring | TaskService owns several responsibilities and has behavior tests |
 
-The tags will be published only after the corresponding baseline has been verified. See `docs/practice-baselines.md` for exact checkout instructions and expected state.
+The tags will be published only after the corresponding baseline has been verified. Story 02 and later use a matching seed profile, e.g. `PRACTICE_BASELINE=02 npm run db:seed`. See `docs/practice-baselines.md` for exact checkout instructions and expected state.
 
 ## Tech stack
 

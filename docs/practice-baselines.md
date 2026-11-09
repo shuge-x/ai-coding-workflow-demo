@@ -1,6 +1,6 @@
 # Practice baseline status
 
-Each practice route starts from an immutable Git tag. Use a fresh clone or worktree for each story so one exercise cannot contaminate another.
+Each practice route starts from an immutable Git tag. Use a fresh clone or separate worktree for each story so one exercise cannot contaminate another.
 
 ## Published start points
 
@@ -13,7 +13,7 @@ Each practice route starts from an immutable Git tag. Use a fresh clone or workt
 | `story-05-start` | Complex bug diagnosis | Drag-and-drop looks successful, but the status is not persisted | `25e30219` |
 | `story-06-start` | Safe refactoring | TaskService handles task lifecycle, assignment, permissions and comments | `3f62257b` |
 
-The tags are annotated and point to exact starting commits. When the tags are published, the `story-06-start` tag triggers a matrix verification workflow for all six baselines. Story 05 additionally proves that its reproduction test fails for the expected persistence symptom; Story 06 proves that existing assignment behavior is protected.
+The tags are annotated and point to exact immutable commits. The [manual baseline matrix workflow](https://github.com/shuge-x/ai-coding-workflow-demo/actions/workflows/manual-practice-baselines.yml) verifies all six baselines. Story 05 additionally proves that its reproduction test fails for the expected persistence symptom; Story 06 proves that existing assignment behavior is protected.
 
 ## Fresh start
 

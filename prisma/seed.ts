@@ -57,6 +57,14 @@ async function main() {
     });
   }
 
+  if (baseline === "06") {
+    const task = await prisma.task.findFirst({ where: { projectId: project.id, title: "完成看板筛选交互" } });
+    const assignee = await prisma.user.findUnique({ where: { email: "chen@example.test" } });
+    if (task && assignee) {
+      await prisma.task.update({ where: { id: task.id }, data: { assigneeId: assignee.id } });
+    }
+  }
+
   console.log("Seeded project:", project.name, "baseline:", baseline, "members:", demoUsers.length);
 }
 

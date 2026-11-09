@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { normalizeTaskTitle } from "@/lib/task-title";
 
-function normalizeTaskTitle(value: string) {
-  return value.trim().replace(/\s+/g, " ");
-}
-
-describe("task title normalization", () => {
+describe("normalizeTaskTitle", () => {
   it("trims leading and trailing whitespace", () => {
     expect(normalizeTaskTitle("  Prepare release  ")).toBe("Prepare release");
   });

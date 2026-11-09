@@ -42,3 +42,18 @@ export async function createTaskAction(input: {
     }
   };
 }
+
+const updateTaskStatusSchema = z.object({
+  taskId: z.string().min(1),
+  status: z.enum(["TODO", "IN_PROGRESS", "DONE"])
+});
+
+export async function updateTaskStatusAction(input: { taskId: string; status: "TODO" | "IN_PROGRESS" | "DONE" }) {
+  const parsed = updateTaskStatusSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false as const, error: "无效的任务状态" };
+  }
+  await updateTaskStatus(parsed.data.taskId, parsed.data.status);
+  revalidatePath("/");
+  return { ok: true as const };
+}

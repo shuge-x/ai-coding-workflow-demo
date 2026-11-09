@@ -1,0 +1,64 @@
+name: Manual practice baseline verification
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Story ${{ matrix.story }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        story: ["01", "02", "03", "04", "05", "06"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: story-${{ matrix.story }}-start
+          fetch-depth: 0
+      - name: Load current verification specs
+        run: |
+          git fetch origin feature/team-task-board-foundation:refs/remotes/origin/feature/team-task-board-foundation
+          mkdir -p e2e
+          git show origin/feature/team-task-board-foundation:e2e/baseline.spec.ts > e2e/baseline.spec.ts
+          if [ "${{ matrix.story }}" = "01" ]; then
+            git show origin/feature/team-task-board-foundation:e2e/board.spec.ts > e2e/board.spec.ts
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: cp .env.example .env
+      - run: npm run db:push
+      - run: PRACTICE_BASELINE=${{ matrix.story }} npm run db:seed
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Run baseline browser checks
+        if: matrix.story == '01'
+        run: PRACTICE_BASELINE=01 npm run test:e2e
+      - name: Run seeded baseline browser smoke check
+        if: matrix.story != '01'
+        run: PRACTICE_BASELINE=${{ matrix.story }} npx playwright test e2e/baseline.spec.ts
+      - name: Confirm the Story 05 bug is reproducible (expected red)
+        if: matrix.story == '05'
+        run: |
+          set +e
+          npm run test:bug-repro > /tmp/story-05-red.log 2>&1
+          status=$?
+          set -e
+          cat /tmp/story-05-red.log
+          if [ "$status" -eq 0 ]; then
+            echo "The seeded Story 05 defect was not reproduced."
+            exit 1
+          fi
+          grep -q "Expected: visible" /tmp/story-05-red.log
+          echo "Expected red signal observed for Story 05."
+      - name: Verify assignment behavior on Story 06
+        if: matrix.story == '06'
+        run: npm run test:assignment

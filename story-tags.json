@@ -22,5 +22,29 @@
   "story-06-start": {
     "sha": "3f62257b0c291207e90f0cd81ad48d64077db50c",
     "message": "Story 06: behavior-tested TaskService with multiple responsibilities"
+  },
+  "story-01-start-r1": {
+    "sha": "d83da99b7f52b416b2e3482b7268a3589aafe2f5",
+    "message": "Story 01 r1: runnable empty-board learner baseline"
+  },
+  "story-02-start-r1": {
+    "sha": "46d98d66aa90c0a65b85f14ccb0c26a3841583d8",
+    "message": "Story 02 r1: runnable seeded-board learner baseline"
+  },
+  "story-03-start-r1": {
+    "sha": "13f22d61f925ca23e17b188b3523cb66cb8c0ece",
+    "message": "Story 03 r1: runnable seeded-board learner baseline"
+  },
+  "story-04-start-r1": {
+    "sha": "ceda558c88a5f82e1d8d6359302b7e62107ab1ef",
+    "message": "Story 04 r1: runnable seeded-board learner baseline"
+  },
+  "story-05-start-r1": {
+    "sha": "f0dd495bd2e814da5cd5029710304b7fa43d9038",
+    "message": "Story 05 r1: runnable seeded-board learner baseline"
+  },
+  "story-06-start-r1": {
+    "sha": "b2675ad4dc0353791555d291a8483094029cf280",
+    "message": "Story 06 r1: runnable seeded-board learner baseline"
   }
 }

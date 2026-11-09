@@ -17,7 +17,7 @@ import {
   Sparkles,
   X
 } from "lucide-react";
-import { createTaskAction } from "@/app/actions";
+import { createTaskAction, updateTaskStatusAction } from "@/app/actions";
 import type { BoardTask, TaskStatus } from "@/lib/task-types";
 
 type Props = {
@@ -49,6 +49,15 @@ export function TaskBoard({ project, initialTasks, members }: Props) {
       (task.title + " " + task.description).toLocaleLowerCase().includes(normalized)
     );
   }, [query, tasks]);
+
+  const moveTask = (taskId: string, status: TaskStatus) => {
+    const previous = tasks;
+    setTasks((current) => current.map((task) => task.id === taskId ? { ...task, status } : task));
+    startTransition(async () => {
+      const result = await updateTaskStatusAction({ taskId, status });
+      if (!result.ok) setTasks(previous);
+    });
+  };
 
   const openCreate = () => {
     setError("");
@@ -161,9 +170,9 @@ export function TaskBoard({ project, initialTasks, members }: Props) {
                 return (
                   <section className="kanban-column" key={column.id} aria-label={column.title}>
                     <div className="column-heading"><div className="column-title"><span className={"column-indicator " + column.tone} /><strong>{column.title}</strong><span className="column-count">{columnTasks.length}</span></div><button className="column-menu" aria-label={column.title + "更多操作"}>···</button></div>
-                    <div className="task-list">
+                    <div className="task-list" onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); const taskId = event.dataTransfer.getData("text/plain"); if (taskId) moveTask(taskId, column.id); }}>
                       {columnTasks.map((task) => (
-                        <article className="task-card" key={task.id}>
+                        <article className="task-card" key={task.id} draggable onDragStart={(event) => { event.dataTransfer.setData("text/plain", task.id); event.dataTransfer.effectAllowed = "move"; }} data-task-id={task.id}>
                           <div className="task-card-top"><span className={"priority-tag " + task.priority.toLowerCase()}>{task.priority === "HIGH" ? "高优先级" : task.priority === "LOW" ? "低优先级" : "普通"}</span><button className="task-menu" aria-label={task.title + "更多操作"}>···</button></div>
                           <h3>{task.title}</h3>
                           {task.description && <p>{task.description}</p>}

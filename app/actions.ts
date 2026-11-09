@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { createTask } from "@/lib/task-service";
+import { createTask, updateTaskStatus } from "@/lib/task-service";
 
 const createTaskSchema = z.object({
   projectId: z.string().min(1),

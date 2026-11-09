@@ -21,7 +21,7 @@ import { createTaskAction } from "@/app/actions";
 import type { BoardTask, TaskStatus } from "@/lib/task-types";
 
 type Props = {
-  project: { id: string; name: string; description: string };
+  project: { id: string; name: string; description: string; teamName: string };
   initialTasks: BoardTask[];
   members: { id: string; name: string; role: string }[];
 };
@@ -91,7 +91,7 @@ export function TaskBoard({ project, initialTasks, members }: Props) {
 
         <div className="workspace-switcher">
           <div className="workspace-avatar">P</div>
-          <div className="workspace-copy"><strong>Product Studio</strong><span>个人工作空间</span></div>
+          <div className="workspace-copy"><strong>{project.teamName}</strong><span>当前团队</span></div>
           <ChevronDown size={15} />
         </div>
 

@@ -17,7 +17,7 @@ import {
   Sparkles,
   X
 } from "lucide-react";
-import { createTaskAction, updateTaskStatusAction } from "@/app/actions";
+import { assignTaskAction, createTaskAction, updateTaskStatusAction } from "@/app/actions";
 import type { BoardTask, TaskStatus } from "@/lib/task-types";
 
 type Props = {
@@ -49,6 +49,16 @@ export function TaskBoard({ project, initialTasks, members }: Props) {
       (task.title + " " + task.description).toLocaleLowerCase().includes(normalized)
     );
   }, [query, tasks]);
+
+  const assignTask = (taskId: string, assigneeId: string | null) => {
+    const previous = tasks;
+    const assigneeName = members.find((member) => member.id === assigneeId)?.name ?? null;
+    setTasks((current) => current.map((task) => task.id === taskId ? { ...task, assigneeId, assigneeName } : task));
+    startTransition(async () => {
+      const result = await assignTaskAction({ taskId, assigneeId });
+      if (!result.ok) setTasks(previous);
+    });
+  };
 
   const moveTask = (taskId: string, status: TaskStatus) => {
     const previous = tasks;
@@ -176,7 +186,7 @@ export function TaskBoard({ project, initialTasks, members }: Props) {
                           <div className="task-card-top"><span className={"priority-tag " + task.priority.toLowerCase()}>{task.priority === "HIGH" ? "高优先级" : task.priority === "LOW" ? "低优先级" : "普通"}</span><button className="task-menu" aria-label={task.title + "更多操作"}>···</button></div>
                           <h3>{task.title}</h3>
                           {task.description && <p>{task.description}</p>}
-                          <div className="task-card-footer"><span className="task-id">TASK-{task.id.slice(-4).toUpperCase()}</span>{task.dueDate && <span className="task-due-date"><CalendarDays size={12} />{new Date(task.dueDate).toLocaleDateString("zh-CN", { month: "short", day: "numeric" })}</span>}<span className="task-avatar">林</span></div>
+                          <div className="task-card-footer"><span className="task-id">TASK-{task.id.slice(-4).toUpperCase()}</span>{task.dueDate && <span className="task-due-date"><CalendarDays size={12} />{new Date(task.dueDate).toLocaleDateString("zh-CN", { month: "short", day: "numeric" })}</span>}<select className="assignee-select" aria-label={task.title + "负责人"} value={task.assigneeId ?? ""} onChange={(event) => assignTask(task.id, event.target.value || null)}><option value="">未指派</option>{members.map((member) => <option key={member.id} value={member.id}>{member.name}</option>)}</select></div>
                         </article>
                       ))}
                       <button className="add-task-inline" onClick={openCreate}><Plus size={15} />添加任务</button>

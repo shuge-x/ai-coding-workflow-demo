@@ -20,3 +20,12 @@ export async function createTask(input: CreateTaskInput) {
     }
   });
 }
+
+export async function updateTaskStatus(taskId: string, status: "TODO" | "IN_PROGRESS" | "DONE") {
+  // Story 05 intentionally contains a persistence defect: the UI changes optimistically,
+  // but this update does not write the requested status to the database.
+  return prisma.task.update({
+    where: { id: taskId },
+    data: { updatedAt: new Date() }
+  });
+}

@@ -3,16 +3,24 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  const team = await prisma.team.upsert({
+    where: { slug: "product-studio" },
+    update: { name: "Product Studio" },
+    create: { id: "team-product-studio", name: "Product Studio", slug: "product-studio" }
+  });
+
   const project = await prisma.project.upsert({
     where: { id: "team-task-board" },
     update: {
       name: "产品研发看板",
-      description: "把目标拆成清晰的下一步，让团队协作有序推进。"
+      description: "把目标拆成清晰的下一步，让团队协作有序推进。",
+      teamId: team.id
     },
     create: {
       id: "team-task-board",
       name: "产品研发看板",
-      description: "把目标拆成清晰的下一步，让团队协作有序推进。"
+      description: "把目标拆成清晰的下一步，让团队协作有序推进。",
+      teamId: team.id
     }
   });
 

@@ -29,6 +29,7 @@ npm run build        # production build
 npm run lint         # ESLint
 npm run test         # unit and integration tests
 npm run test:e2e     # Playwright browser tests
+npm run test:bug-repro # intentionally failing Story 05 reproduction
 npm run db:push      # sync Prisma schema to local SQLite
 npm run db:seed      # create demo data
 npm run db:reset     # reset local database and reseed

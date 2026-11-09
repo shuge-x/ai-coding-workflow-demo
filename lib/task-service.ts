@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { normalizeTaskTitle } from "@/lib/task-title";
+import { canAssignTask } from "@/lib/task-rules";
 
 export type CreateTaskInput = {
   projectId: string;
@@ -7,10 +8,6 @@ export type CreateTaskInput = {
   description?: string;
   dueDate?: Date | null;
 };
-
-export function canAssignTask(actorRole: string | undefined, assigneeIsProjectMember: boolean) {
-  return (actorRole === "OWNER" || actorRole === "MANAGER") && assigneeIsProjectMember;
-}
 
 export async function createTask(input: CreateTaskInput) {
   return prisma.task.create({

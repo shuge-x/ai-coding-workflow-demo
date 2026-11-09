@@ -144,19 +144,10 @@ export function TaskBoard({ project, initialTasks }: Props) {
           </div>
 
           {tasks.length === 0 ? (
-            <section className="empty-state" aria-label="空任务看板">
-              <div className="empty-illustration">
-                <div className="empty-orbit orbit-one" />
-                <div className="empty-orbit orbit-two" />
-                <div className="empty-paper"><ListTodo size={34} strokeWidth={1.5} /></div>
-                <div className="empty-spark spark-one"><Sparkles size={15} /></div>
-                <div className="empty-spark spark-two"><Check size={13} /></div>
-              </div>
-              <span className="empty-kicker">一切从这里开始</span>
-              <h2>让第一个好点子落地</h2>
-              <p>这个看板还没有任务。创建第一项任务，把想法变成下一步行动。</p>
-              <button className="primary-button empty-cta" onClick={openCreate}><Plus size={17} />创建第一个任务</button>
-              <span className="empty-hint">小提示：先写下最重要的一件事，其他的可以稍后安排。</span>
+            <section className="empty-state-basic" aria-label="空任务看板">
+              <h2>暂无任务</h2>
+              <p>这个看板还没有任务。</p>
+              <button className="primary-button" onClick={openCreate}>新建任务</button>
             </section>
           ) : (
             <div className="kanban-grid">

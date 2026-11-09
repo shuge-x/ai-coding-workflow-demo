@@ -1,42 +1,34 @@
-name: Publish practice story start tags
+name: Verify published practice story start tags
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
       - story-tags.json
+      - .github/workflows/publish-practice-tags.yml
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  publish:
+  verify:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Fetch the practice development history
-        run: git fetch origin feature/team-task-board-foundation:refs/remotes/origin/feature/team-task-board-foundation
-      - name: Create annotated story tags
+          fetch-tags: true
+      - name: Verify every story tag points to its declared commit
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           node <<'NODE'
-          const { execFileSync, spawnSync } = require("node:child_process");
+          const { execFileSync } = require("node:child_process");
           const tags = require("./story-tags.json");
           for (const [tag, entry] of Object.entries(tags)) {
-            const existing = spawnSync("git", ["show-ref", "--verify", "--quiet", `refs/tags/${tag}`]);
-            if (existing.status === 0) {
-              console.log(`Skip existing tag ${tag}`);
-              continue;
+            const actual = execFileSync("git", ["rev-list", "-n", "1", `refs/tags/${tag}^{commit}`], { encoding: "utf8" }).trim();
+            if (actual !== entry.sha) {
+              throw new Error(`Tag ${tag} points to ${actual}, expected ${entry.sha}`);
             }
-            const reachable = spawnSync("git", ["merge-base", "--is-ancestor", entry.sha, "origin/feature/team-task-board-foundation"]);
-            if (reachable.status !== 0) {
-              throw new Error(`Target commit for ${tag} is not reachable from the practice branch: ${entry.sha}`);
-            }
-            execFileSync("git", ["tag", "-a", tag, entry.sha, "-m", entry.message], { stdio: "inherit" });
-            execFileSync("git", ["push", "origin", `refs/tags/${tag}`], { stdio: "inherit" });
-            console.log(`Published ${tag} -> ${entry.sha}`);
+            console.log(`Verified ${tag} -> ${actual}`);
           }
           NODE

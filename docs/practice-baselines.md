@@ -13,7 +13,7 @@ A start tag is not published merely because the application builds. It must have
 |---|---|---|---|
 | `story-01-start` | Quick change | Empty task board; intentionally basic empty state | In preparation |
 | `story-02-start` | Requirements discovery | Existing due-date field and tasks; reminder rules deliberately undefined | Planned |
-| `story-03-start` | Feature development | Projects and memberships exist; assignment workflow is absent | Planned |
+| `story-03-start` | Feature development | Projects and memberships exist; assignment workflow is absent | In preparation |
 | `story-04-start` | Large architecture | Single-team / single-project assumptions documented | Planned |
 | `story-05-start` | Complex bug diagnosis | Drag-and-drop UI changes optimistically; persisted status remains unchanged | Planned |
 | `story-06-start` | Safe refactoring | TaskService contains multiple responsibilities; behavior tests pass | Planned |

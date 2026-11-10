@@ -120,9 +120,9 @@ a { color: inherit; text-decoration: none; }
 .spark-two { bottom: 12px; left: 17px; color: #1b9b72; }
 .empty-kicker { color: #7c88d9; font-size: 10px; font-weight: 800; letter-spacing: 1.4px; }
 .empty-state h2 { margin: 9px 0 8px; font: 800 23px Manrope, "Noto Sans SC", sans-serif; letter-spacing: -.4px; }
-.empty-state p { max-width: 390px; margin: 0; color: #8993a2; font-size: 12px; line-height: 1.9; }
-.empty-cta { margin-top: 20px; min-height: 41px; padding: 0 19px; }
-.empty-hint { margin-top: 15px; color: #a6aebb; font-size: 10px; }
+.empty-state p { max-width: 390px; margin: 0; color: #647083; font-size: 12px; line-height: 1.9; }
+.empty-cta { margin-top: 20px; min-height: 44px; padding: 0 19px; }
+.empty-hint { max-width: 390px; margin-top: 15px; color: #647083; font-size: 11px; line-height: 1.8; }
 .kanban-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; padding-top: 22px; }
 .kanban-column { min-width: 0; }
 .column-heading { display: flex; align-items: center; justify-content: space-between; padding: 0 2px 12px; }
@@ -191,13 +191,9 @@ a { color: inherit; text-decoration: none; }
   .board-toolbar { margin-top: 18px; }
   .board-summary { font-size: 9px; gap: 5px; }
   .kanban-grid { grid-template-columns: 1fr; }
-  .empty-state { min-height: 420px; }
+  .empty-state { min-height: 360px; padding: 32px 0; }
+  .empty-state h2 { font-size: 21px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
-
-/* Story 01 deliberately starts with a plain empty state for the quick-change exercise. */
-.empty-state-basic{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;padding:32px;text-align:center;color:#7c8797}
-.empty-state-basic h2{margin:0 0 8px;color:#566174;font-size:18px;font-weight:600}
-.empty-state-basic p{margin:0 0 18px;font-size:12px}

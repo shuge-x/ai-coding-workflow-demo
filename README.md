@@ -14,6 +14,7 @@ The purpose of this repository is educational: each practice route starts from a
 ```bash
 npm install
 cp .env.example .env
+node -e "require('fs').closeSync(require('fs').openSync('prisma/dev.db','a'))"
 npm run db:push
 PRACTICE_BASELINE=01 npm run db:seed
 npm run dev

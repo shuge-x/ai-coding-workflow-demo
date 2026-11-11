@@ -4,7 +4,6 @@ import { useMemo, useState, useTransition } from "react";
 import {
   Bell,
   CalendarDays,
-  Check,
   ChevronDown,
   CircleHelp,
   Command,
@@ -14,7 +13,6 @@ import {
   Plus,
   Search,
   Settings2,
-  Sparkles,
   X
 } from "lucide-react";
 import { createTaskAction, updateTaskStatusAction } from "@/app/actions";

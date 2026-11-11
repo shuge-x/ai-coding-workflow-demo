@@ -19,7 +19,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:reset": "prisma db push --force-reset && npm run db:seed",
     "test:bug-repro": "PRACTICE_BUG_REPRO=1 playwright test e2e/bug-repro.spec.ts",
-    "test:assignment": "PRACTICE_BASELINE=06 npm run db:reset && PRACTICE_ASSIGNMENT_TEST=1 playwright test e2e/assignment.spec.ts"
+    "test:assignment": "PRACTICE_BASELINE=06 npm run db:reset && PRACTICE_ASSIGNMENT_TEST=1 playwright test e2e/assignment.spec.ts",
+    "test:behavior": "node -e \"require('fs').closeSync(require('fs').openSync('prisma/behavior-test.db','a'))\" && DATABASE_URL=file:./behavior-test.db prisma db push --skip-generate && DATABASE_URL=file:./behavior-test.db tsx tests/behavior.integration.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",

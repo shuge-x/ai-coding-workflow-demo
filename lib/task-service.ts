@@ -24,6 +24,6 @@ export async function createTask(input: CreateTaskInput) {
 export async function updateTaskStatus(taskId: string, status: "TODO" | "IN_PROGRESS" | "DONE") {
   return prisma.task.update({
     where: { id: taskId },
-    data: { updatedAt: new Date() }
+    data: { status }
   });
 }

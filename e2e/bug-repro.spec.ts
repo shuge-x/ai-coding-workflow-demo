@@ -9,7 +9,11 @@ test("dragging a task persists its new status after refresh", async ({ page }) =
   const doneColumn = page.locator('.kanban-column[aria-label="已完成"] .task-list');
 
   await expect(card).toBeVisible();
+  const saved = page.waitForResponse((response) => response.request().method() === "POST" && new URL(response.url()).pathname === "/");
   await card.dragTo(doneColumn);
+  const response = await saved;
+  console.log("Status update HTTP response:", response.status());
+  expect(response.ok()).toBe(true);
   await expect(doneColumn.getByRole("heading", { name: taskTitle })).toBeVisible();
 
   await page.reload();

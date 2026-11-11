@@ -212,3 +212,5 @@ a { color: inherit; text-decoration: none; }
 .member-0{background:#d18b6c}.member-1{background:#7186c9}.member-2{background:#45a68e}.member-3{background:#9a7bc5}
 .member-count{margin-left:6px;color:#8993a2;font-size:10px;white-space:nowrap}
 @media(max-width:1180px){.member-stack{display:none}}
+
+.demo-identity{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-bottom:18px}.demo-identity small{color:#64748b}.demo-identity select,.assignment-field select{border:1px solid #cbd5e1;border-radius:6px;padding:7px;background:#fff;color:#334155;max-width:100%}.assignment-field{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0;font-size:12px}.assignment-field select{min-width:0}

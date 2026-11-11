@@ -2,7 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { createTask } from "@/lib/task-service";
+import { cookies } from "next/headers";
+import { demoActors, getDemoActor } from "@/lib/demo-identity";
+import { assignTask, createTask } from "@/lib/task-service";
 
 const createTaskSchema = z.object({
   projectId: z.string().min(1),
@@ -38,7 +40,29 @@ export async function createTaskAction(input: {
       status: task.status as "TODO" | "IN_PROGRESS" | "DONE",
       priority: task.priority as "LOW" | "MEDIUM" | "HIGH",
       dueDate: task.dueDate?.toISOString() ?? null,
+      assigneeId: null,
+      assigneeName: null,
       createdAt: task.createdAt.toISOString()
     }
   };
+}
+
+// Deliberately selectable identities for a local teaching app; this is not authentication.
+export async function selectDemoActorAction(actorId: string) {
+  const parsed = z.enum(demoActors).safeParse(actorId);
+  if (!parsed.success) return { ok: false as const, error: "无效的教学身份" };
+  (await cookies()).set("demo-actor", parsed.data, { httpOnly: true, sameSite: "lax", path: "/" });
+  return { ok: true as const };
+}
+
+export async function assignTaskAction(input: { taskId: string; assigneeId: string | null }) {
+  const parsed = z.object({ taskId: z.string().min(1), assigneeId: z.string().min(1).nullable() }).safeParse(input);
+  if (!parsed.success) return { ok: false as const, error: "无效的指派请求" };
+  try {
+    const task = await assignTask(parsed.data.taskId, await getDemoActor(), parsed.data.assigneeId);
+    revalidatePath("/");
+    return { ok: true as const, assigneeId: task.assigneeId, assigneeName: task.assignee?.name ?? null };
+  } catch (error) {
+    return { ok: false as const, error: error instanceof Error ? error.message : "指派失败" };
+  }
 }

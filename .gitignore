@@ -10,3 +10,10 @@ test-results
 *.db
 *.db-journal
 .DS_Store
+
+next-env.d.ts
+
+*.tsbuildinfo
+
+.codegraph
+package-lock.json

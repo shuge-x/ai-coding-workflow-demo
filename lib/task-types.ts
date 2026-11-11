@@ -8,5 +8,7 @@ export type BoardTask = {
   status: TaskStatus;
   priority: TaskPriority;
   dueDate: string | null;
+  assigneeId: string | null;
+  assigneeName: string | null;
   createdAt: string;
 };

@@ -1,3 +1,4 @@
+import { getDemoActor } from "@/lib/demo-identity";
 import { prisma } from "@/lib/prisma";
 import { TaskBoard } from "@/app/components/task-board";
 
@@ -8,7 +9,8 @@ export default async function HomePage() {
     orderBy: { createdAt: "asc" },
     include: {
       tasks: {
-        orderBy: { createdAt: "desc" }
+        orderBy: { createdAt: "desc" },
+        include: { assignee: true }
       },
       members: {
         include: { user: true },
@@ -37,6 +39,8 @@ export default async function HomePage() {
     status: task.status as "TODO" | "IN_PROGRESS" | "DONE",
     priority: task.priority as "LOW" | "MEDIUM" | "HIGH",
     dueDate: task.dueDate?.toISOString() ?? null,
+    assigneeId: task.assigneeId,
+    assigneeName: task.assignee?.name ?? null,
     createdAt: task.createdAt.toISOString()
   }));
 
@@ -46,5 +50,6 @@ export default async function HomePage() {
     role: membership.role
   }));
 
-  return <TaskBoard project={{ id: project.id, name: project.name, description: project.description }} initialTasks={tasks} members={members} />;
+  const actorId = await getDemoActor();
+  return <TaskBoard key={actorId} actorId={actorId} project={{ id: project.id, name: project.name, description: project.description }} initialTasks={tasks} members={members} />;
 }

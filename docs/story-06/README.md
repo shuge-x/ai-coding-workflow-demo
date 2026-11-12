@@ -10,7 +10,7 @@ CodeGraph 1.6.2 的起点探索显示：`TaskService` 同时包含任务生命�
 
 ## 行为保护
 
-`npm run test:behavior` 使用独立 `behavior-test.db`，通过公共服务接口验证：
+`npm run test:behavior` 使用独立 `behavior-test.db`，通过 `task-service` 公共接口验证；重构后 `task-service` 保留兼容导出，因此同一测试文件也能在 `story-06-start-r1` 上运行：
 
 - 任务标题规范化与初始状态；
 - 状态更新；
@@ -18,7 +18,7 @@ CodeGraph 1.6.2 的起点探索显示：`TaskService` 同时包含任务生命�
 - Owner 指派、Manager 更换/清空；
 - Member、非成员、非项目成员目标和不存在任务的错误。
 
-`npm test`、`npm run typecheck`、`npm run lint` 和 `npm run build` 也必须执行。测试通过不等于用户完成 Human Accepted。
+作者实际在原始 Tag 安装依赖、初始化独立数据库后运行同一测试文件，输出 PASS；重构分支再通过 `npm run test:behavior`。`npm test`、`npm run typecheck`、`npm run lint` 和 `npm run build` 也必须执行。测试通过不等于用户完成 Human Accepted。
 
 ## 交接
 

@@ -53,3 +53,6 @@ export async function listTaskComments(taskId: string) {
     orderBy: { createdAt: "asc" }
   });
 }
+
+// Keep the public task-service seam stable while the assignment implementation moves behind it.
+export { assignTask } from "@/lib/task-assignment";

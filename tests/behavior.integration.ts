@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { prisma } from "../lib/prisma";
-import { assignTask } from "../lib/task-assignment";
-import { createTask, updateTaskStatus, addTaskComment, listTaskComments } from "../lib/task-service";
+import { assignTask, createTask, updateTaskStatus, addTaskComment, listTaskComments } from "../lib/task-service";
 
 
 async function main() {

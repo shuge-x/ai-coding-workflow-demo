@@ -1,0 +1,110 @@
+name: Verify published practice examples
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-practice-examples.yml
+      - docs/practice-baselines.md
+      - README.md
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Story ${{ matrix.story }} example
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - story: "01"
+            tag: story-01-example-r1
+            kind: app
+          - story: "02"
+            tag: story-02-example-r1
+            kind: docs
+          - story: "03"
+            tag: story-03-example-r1
+            kind: app
+          - story: "04"
+            tag: story-04-example-r1
+            kind: docs
+          - story: "05"
+            tag: story-05-example-r2
+            kind: app
+          - story: "06"
+            tag: story-06-example-r3
+            kind: app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.tag }}
+          fetch-depth: 0
+
+      - name: Verify documentation example
+        if: matrix.kind == 'docs'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          files = list(Path('.').glob('**/*.md'))
+          for path in files:
+              for target in re.findall(r'\]\(([^)]+)\)', path.read_text()):
+                  if target.startswith(('http://', 'https://', '#')):
+                      continue
+                  candidate = (path.parent / target).resolve()
+                  if not candidate.is_file():
+                      raise SystemExit(f'{path}: missing local link {target}')
+          print(f'Checked {len(files)} Markdown files')
+          PY
+          if [ "${{ matrix.story }}" = "04" ]; then
+            python3 experiments/tenant-scope.py
+          fi
+
+      - name: Set up Node.js
+        if: matrix.kind == 'app'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install and initialize the example
+        if: matrix.kind == 'app'
+        run: |
+          npm install
+          cp .env.example .env
+          npm run db:push
+          PRACTICE_BASELINE=${{ matrix.story }} npm run db:seed
+
+      - name: Run application checks
+        if: matrix.kind == 'app'
+        run: |
+          npm run typecheck
+          npm run lint
+          npm test
+          npm run build
+
+      - name: Install Chromium
+        if: matrix.kind == 'app'
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify Story 01 browser journey
+        if: matrix.story == '01'
+        run: PRACTICE_BASELINE=01 npm run test:e2e
+
+      - name: Verify Story 03 assignment journey
+        if: matrix.story == '03'
+        run: PRACTICE_BASELINE=03 npx playwright test e2e/assignment.spec.ts
+
+      - name: Verify Story 05 fixed bug journey
+        if: matrix.story == '05'
+        run: npm run test:bug-repro
+
+      - name: Verify Story 06 behavior and assignment journeys
+        if: matrix.story == '06'
+        run: |
+          npm run test:behavior
+          npm run test:assignment

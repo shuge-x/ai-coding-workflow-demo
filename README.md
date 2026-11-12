@@ -52,6 +52,21 @@ Each tag is an independent starting point. Start each exercise in a fresh clone 
 
 The `-r1` tags are the recommended learner starting points and contain runnable baseline browser checks. The original tags remain published as historical baselines. All annotated tags point to immutable commits listed in `docs/practice-baselines.md`. Story 02 and later use a matching seed profile, e.g. `PRACTICE_BASELINE=02 npm run db:seed`. The published baseline matrix verifies setup, tests, browser smoke checks, the Story 05 expected-red reproduction, and Story 06 behavior protection.
 
+## Reference examples
+
+课程网站 04 工作流实战会链接到独立的参考 Tag。参考实现不合并到 `main`，每个 Tag 都保留对应故事的独立起点和交接工件：
+
+| Story | Reference Tag | 内容 |
+|---|---|---|
+| 01 | `story-01-example-r1` | 空状态快速修改与浏览器证据 |
+| 02 | `story-02-example-r1` | 需求探索术语、访谈和候选基线 |
+| 03 | `story-03-example-r1` | 任务指派纵向切片与权限验证 |
+| 04 | `story-04-example-r1` | Wayfinder 决策地图、隔离研究与实验 |
+| 05 | `story-05-example-r2` | 拖拽状态持久化 Bug 修复与根因记录 |
+| 06 | `story-06-example-r3` | TaskService 指派边界重构与行为保持 |
+
+`verify-practice-examples.yml` 会按这个矩阵检查文档链接、应用构建、浏览器旅程和参考工件实验。参考 Tag 的自动化通过不等于用户本人完成 Human Accepted。
+
 ## Tech stack
 
 - Next.js App Router

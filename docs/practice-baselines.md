@@ -15,6 +15,8 @@ Each practice route starts from an immutable Git tag. Use a fresh clone or separ
 
 The `-r1` tags are the recommended learner starting points and contain runnable baseline browser checks. The original tags remain published as historical baselines. All tags are annotated and point to exact immutable commits. The [manual baseline matrix workflow](https://github.com/shuge-x/ai-coding-workflow-demo/actions/workflows/manual-practice-baselines.yml) verifies all six baselines. Story 05 additionally proves that its reproduction test fails for the expected persistence symptom; Story 06 proves that existing assignment behavior is protected.
 
+课程参考实现使用独立 Tag，不合并到 `main`。当前参考 Tag 为：`story-01-example-r1`、`story-02-example-r1`、`story-03-example-r1`、`story-04-example-r1`、`story-05-example-r2`、`story-06-example-r3`。`verify-practice-examples.yml` 会检查这些 Tag 的文档链接、构建、浏览器旅程和参考工件；它不替代用户本人验收。
+
 ## Fresh start
 
 Use a fresh clone or a separate worktree for each route:

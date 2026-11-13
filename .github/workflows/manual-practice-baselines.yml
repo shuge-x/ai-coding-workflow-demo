@@ -15,7 +15,7 @@ jobs:
       matrix:
         story: ["01", "02", "03", "04", "05", "06"]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: story-${{ matrix.story }}-start-r1
           fetch-depth: 0
@@ -27,7 +27,7 @@ jobs:
           if [ "${{ matrix.story }}" = "01" ]; then
             git show origin/feature/team-task-board-foundation:e2e/board.spec.ts > e2e/board.spec.ts
           fi
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - run: npm install
